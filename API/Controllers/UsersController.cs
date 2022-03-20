@@ -4,7 +4,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
+using API.Dtos;
 using API.Entities;
+using API.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -12,29 +15,32 @@ using Microsoft.Extensions.Logging;
 
 namespace API.Controllers
 {
+    [Authorize]
        public class UsersController : BaseApiController
     {
-        private readonly DataContext _context;
-        private readonly ILogger<UsersController> _logger;
+   
+        private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
 
-        public UsersController(DataContext context,ILogger<UsersController> logger)
-        {
-            _context = context;
-            _logger = logger;
+        public UsersController(IUserRepository userRepository,IMapper mapper)
+        {         
+            _userRepository = userRepository;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<MemberDto>>> GetUsers()
         {
-            return await _context.Users.ToListAsync();
+            var users =  await _userRepository.GetUsersAsync();
+            return Ok(_mapper.Map<IEnumerable<MemberDto>>(users));
             
         }
         //api/users/1
-        [Authorize]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AppUser>> GetUser(int id)
+        
+        [HttpGet("{username}")]
+        public async Task<ActionResult<MemberDto>> GetUser(string username)
         {
-            return await _context.Users.FindAsync(id);
+            return await _userRepository.GetMemberAsync(username);            
 
         }
     }
