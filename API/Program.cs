@@ -1,5 +1,6 @@
 using System.Text;
 using API.Data;
+using API.Data.Migrations;
 using API.Helpers;
 using API.Interfaces;
 using API.Middleware;
@@ -23,6 +24,7 @@ builder.Services.AddCors();
 builder.Services.Configure<CloudinarySettings>(builder.Configuration.GetSection("CloudinarySettings"));
 builder.Services.AddScoped<IPhotoService,PhotoService>();
 builder.Services.AddScoped<LogUserActivity>();
+builder.Services.AddScoped<ILikesRepository,LikesRepository>();
 builder.Services.AddScoped<ITokenService,TokenService>();
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles).Assembly);
