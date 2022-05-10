@@ -25,7 +25,7 @@ namespace API.Entities
         public ICollection<Photo> Photos { get; set; }
         public ICollection<UserLike> LikedByUsers { get; set; } = new HashSet<UserLike>();
         public ICollection<UserLike> LikedUsers { get; set; } = new HashSet<UserLike>();
-        
-
+        public ICollection<Message> MessagesSent { get; set; } = new HashSet<Message>();
+        public ICollection<Message> MessagesReceived { get; set; } = new HashSet<Message>();
     }
 }
